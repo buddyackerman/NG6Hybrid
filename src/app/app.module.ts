@@ -14,9 +14,6 @@ declare var angular: any;
 const upgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule));
 upgradeAdapter.upgradeNg1Provider('$scope');
 
-angular.module('testApp')
-  .directive('ngjsContentComponent', upgradeAdapter.downgradeNg2Component(NgjsContentComponent))
-  .directive('routedComponentComponent', upgradeAdapter.downgradeNg2Component(RoutedComponentComponent));
 
 upgradeAdapter.bootstrap(document.body, ['testApp']);
 
@@ -53,13 +50,5 @@ const routes: Routes = [
   bootstrap: [AppComponent]
 })
 export class AppModule {
-/*	
-  constructor(private upgrade: UpgradeModule) {}
-
-  ngDoBootstrap() {
-    // We bootstrap the AngularJS app.
-    this.upgrade.bootstrap(document.body, ['testApp']);
-  }
-*/
 }
 
