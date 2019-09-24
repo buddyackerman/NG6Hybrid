@@ -1,22 +1,22 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, forwardRef } from '@angular/core';
-import {APP_BASE_HREF} from '@angular/common';
-import { UpgradeModule } from '@angular/upgrade/static';
+import { NgModule } from '@angular/core';
+import { APP_BASE_HREF } from '@angular/common';
+import { UpgradeModule, setAngularJSGlobal, downgradeComponent } from '@angular/upgrade/static';
 import { UpgradeAdapter } from '@angular/upgrade';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { NgjsContentComponent } from './ngjs-content/ngjs-content.component';
 import { RoutedComponentComponent } from './routed-component/routed-component.component';
+import { TestDirective2Wrapper } from './directive-wrappers/TestDirective2Wrapper';
+import { TestDirectiveWrapper } from './directive-wrappers/TestDirectiveWrapper';
 
+//import * as angular from 'angular';
 declare var angular: any;
 
-const upgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule));
-upgradeAdapter.upgradeNg1Provider('$scope');
-
-
-upgradeAdapter.bootstrap(document.body, ['testApp']);
-
+angular
+  .module('testApp')
+  .directive('appRoot', downgradeComponent({ component: AppComponent }));
 
 const routes: Routes = [
   {
@@ -30,14 +30,13 @@ const routes: Routes = [
   }
 ];
 
-
 @NgModule({
   declarations: [
     AppComponent,
     NgjsContentComponent,
-	upgradeAdapter.upgradeNg1Component('testDirective'),
-	upgradeAdapter.upgradeNg1Component('testDirective2'),
-	RoutedComponentComponent
+	RoutedComponentComponent,
+    TestDirectiveWrapper,
+    TestDirective2Wrapper
   ],
   imports: [
     BrowserModule,
@@ -45,10 +44,17 @@ const routes: Routes = [
 	RouterModule.forRoot(routes, { useHash: false, onSameUrlNavigation: 'reload', enableTracing: false })
   ],
   providers: [
-	{provide: APP_BASE_HREF, useValue: '/ngupgrade'}
+	{ provide: APP_BASE_HREF, useValue: '/ngupgrade' },
+    { provide: '$scope', useExisting: '$rootScope' }
   ],
-  bootstrap: [AppComponent]
+  entryComponents: [AppComponent]
 })
 export class AppModule {
-}
+  constructor(private upgrade: UpgradeModule) { }
 
+  public ngDoBootstrap(app: any): void {
+    setAngularJSGlobal(angular);
+    this.upgrade.bootstrap(document.body, ['testApp'], { strictDi: false });
+    app.bootstrap(AppComponent);
+  }
+}

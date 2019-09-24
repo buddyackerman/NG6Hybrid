@@ -1,6 +1,4 @@
 'use strict';
 
-// Define the `phonecatApp` module
-angular.module('testApp', [
-  'ngAnimate',
-]);
+// Define the `testApp` module
+angular.module('testApp', []);

@@ -28,10 +28,9 @@
             "scripts": [
 				"src/lib/angularjs/angular.min.js",
 				"src/lib/angularjs/jquery.min.js",
-				"src/lib/angularjs/angular-animate.min.js",
-				"src/AngularJsApp/app.module.js",
-				"src/AngularJsApp/test-directive/test-directive.js",
-				"src/AngularJsApp/test-directive2/test-directive2.js"
+                "src/AngularJsApp/app.module.js",
+                "src/AngularJsApp/test-directive/test-directive.js",
+                "src/AngularJsApp/test-directive2/test-directive2.js"
 			],
             "deployUrl": "/NGUpgrade/"
           },
