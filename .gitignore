@@ -41,3 +41,5 @@ Thumbs.db
 
 #Custom Ignores
 /e2e
+
+test/
